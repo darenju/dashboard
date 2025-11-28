@@ -1,0 +1,24 @@
+<RCC>
+    <qresource prefix="/">
+        <file>images/dash_bcg.png</file>
+        <file>images/check.png</file>
+        <file>images/lowbeam.png</file>
+        <file>images/parking.png</file>
+        <file>images/highbeam.png</file>
+        <file>images/airbag.png</file>
+        <file>images/battery.png</file>
+        <file>images/engine.png</file>
+        <file>images/gearbox.png</file>
+        <file>images/info.png</file>
+        <file>images/key.png</file>
+        <file>images/left.png</file>
+        <file>images/oil.png</file>
+        <file>images/pressure.png</file>
+        <file>images/right.png</file>
+        <file>images/temperature.png</file>
+        <file>images/retarder.png</file>
+        <file>images/chrono.png</file>
+        <file>images/wheel.png</file>
+        <file>images/engine-brake.png</file>
+    </qresource>
+</RCC>
