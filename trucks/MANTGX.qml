@@ -208,8 +208,9 @@ Item {
             anchors.left: parent.left
             anchors.leftMargin: 7
             width: 365
-            height: 365
-            needleOffset: 0.5
+            startAngle: -180
+            spanAngle: 180
+            // needleOffset: 0.5
             value: speed
 
             Text {
@@ -229,15 +230,13 @@ Item {
             anchors.right: parent.right
             anchors.rightMargin: 7
             width: 365
-            height: 365
             minimum: 0
             maximum: 30
             startAngle: 180
             spanAngle: -180
             needleOffset: -0.5
             value: rpm
-            customDisplay: true
-            displayValue: displayedGear
+            hideText: true
 
             // Indicateur de retarder
             Image {

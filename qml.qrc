@@ -20,5 +20,26 @@
         <file>images/chrono.png</file>
         <file>images/wheel.png</file>
         <file>images/engine-brake.png</file>
+        <file>images/daf-xf105/dashboard-off.jpg</file>
+        <file>images/daf-xf105/dashboard-on.jpg</file>
+        <file>images/daf-xf105/needles-covers.png</file>
+        <file>fonts/digital-7.ttf</file>
+        <file>images/daf-xf105/info.png</file>
+        <file>images/daf-xf105/lowbeam.png</file>
+        <file>images/daf-xf105/retarder.png</file>
+        <file>images/daf-xf105/cruise.png</file>
+        <file>images/generic/background.png</file>
+        <file>images/generic/needle-big.png</file>
+        <file>images/generic/rest.png</file>
+        <file>images/generic/needle-small.png</file>
+        <file>images/generic/background-reversed.png</file>
+        <file>images/generic/cruise.png</file>
+        <file>images/generic/lblinker.png</file>
+        <file>images/generic/rblinker.png</file>
+        <file>images/generic/retarder.png</file>
+        <file>images/brands/scania.png</file>
+        <file>images/brands/daf.png</file>
+        <file>images/brands/man.png</file>
+        <file>images/brands/volvo.png</file>
     </qresource>
 </RCC>

@@ -2,8 +2,8 @@ import QtQuick 2.15
 import QtQuick.Layouts
 
 RowLayout {
-    // anchors.fill: parent
-    height: 200
+    anchors.top: parent.top
+    height: 70
     width: parent.width
     spacing: 15
     visible: connected || displayIcons

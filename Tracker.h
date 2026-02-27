@@ -43,7 +43,7 @@ signals:
     void communicationEstablished(bool);
     void gearChanged(int);
     void electricityChanged(bool);
-    void dataChanged(int,int,int,double,double,bool,bool,bool,bool,bool,bool,bool,bool,QString,QString,QString,int);
+    void dataChanged(int,int,int,int,double,double,bool,bool,bool,bool,bool,bool,bool,bool,QString,QString,QString,int,int,QString,int,int,QString);
 };
 
 #endif // TRACKER_H

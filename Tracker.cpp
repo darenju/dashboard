@@ -84,10 +84,10 @@ QString valueToRemainingTime(qint64 value) {
 }
 
 void Tracker::processFrame(QByteArray frame) {
-    QJsonDocument document = QJsonDocument::fromJson(frame);
-    QJsonObject data = document.object();
+    QJsonDocument document  = QJsonDocument::fromJson(frame);
+    QJsonObject data        = document.object();
     std::string payloadType = data.value("payloadType").toString().toStdString();
-    QJsonObject payload = data.value("payload").toObject();
+    QJsonObject payload     = data.value("payload").toObject();
 
     if (payloadType == "frame") {
         QJsonObject truck      = payload.value("truck").toObject();
@@ -108,33 +108,46 @@ void Tracker::processFrame(QByteArray frame) {
             this->lastElectricity = electricity;
         }
 
-        double speed = truck.value("speed").toDouble() * SPEED_MULTIPLIER;
-        int speedFormatted = speed < 1.0 ? 0 : static_cast<int>(speed);
-        int speedLimit     = static_cast<int>(navigation.value("speed_limit").toDouble() * SPEED_MULTIPLIER);
-        int rpm = (int)(engine.value("rpm").toDouble() / 100);
-        double fuelPercentage = truck.value("fuel").toObject().value("amount").toDouble() / config.value("fuelCapacity").toDouble();
+        double speed            = truck.value("speed").toDouble() * SPEED_MULTIPLIER;
+        int speedInt            = abs(round(speed));
+        int speedLimit          = static_cast<int>(round(navigation.value("speed_limit").toDouble() * SPEED_MULTIPLIER));
+        int cruiseControlSpeed  = static_cast<int>(round(truck.value("cruiseControl").toDouble() * SPEED_MULTIPLIER));
+        int rpm                 = static_cast<int>(engine.value("rpm").toDouble() / 100);
+        double fuelCapacity     = config.value("fuelCapacity").toDouble();
+        if (!fuelCapacity) {
+            // fuelCapacity = 1234.0;
+        }
+        double fuelPercentage   = truck.value("fuel").toObject().value("amount").toDouble() / fuelCapacity;
         double adbluePercentage = truck.value("adblue").toObject().value("amount").toDouble() / config.value("adblueCapacity").toDouble();
 
         QJsonObject light = truck.value("light").toObject();
-        bool leftBlinker = light.value("leftBlinker").toBool();
+        bool leftBlinker  = light.value("leftBlinker").toBool();
         bool rightBlinker = light.value("rightBlinker").toBool();
-        bool lowBeam = light.value("lowBeam").toBool();
-        bool highBeam = light.value("highBeam").toBool();
+        bool lowBeam      = light.value("lowBeam").toBool();
+        bool highBeam     = light.value("highBeam").toBool();
 
-        QJsonObject brake = truck.value("brake").toObject();
-        bool parking = brake.value("parking").toBool();
+        QJsonObject brake    = truck.value("brake").toObject();
+        bool parking         = brake.value("parking").toBool();
         bool pressureWarning = brake.value("airPressureWarning").toBool();
-        bool retarder = brake.value("retarder").toInt() > 0;
-        bool engineBrake = brake.value("motor").toBool();
-        int gameTime = static_cast<int>(payload.value("gameTime").toDouble());
-        int deliveryTime = static_cast<int>(navigation.value("time").toDouble());
-        int restStop = static_cast<int>(payload.value("restStop").toDouble());
+        bool retarder        = brake.value("retarder").toInt() > 0;
+        bool engineBrake     = brake.value("motor").toBool();
 
-        int odometer = static_cast<int>(truck.value("odometer").toDouble());
+        int gameTime         = static_cast<int>(round(payload.value("gameTime").toDouble()));
+        int deliveryTime     = static_cast<int>(round(navigation.value("time").toDouble())) / 60;
+        int deliveryDistance = static_cast<int>(ceil(navigation.value("distance").toDouble() / 1000));
+        int restStop         = static_cast<int>(round(payload.value("restStop").toDouble()));
+
+        int odometer     = static_cast<int>(truck.value("odometer").toDouble());
+
+        QString cargo      = job.value("cargo").toString();
+        int cargoWeight    = job.value("cargoMass").toDouble() / 1000;
+        int oilTemperature = static_cast<int>(ceil(truck.value("oil").toObject().value("temperature").toDouble()));
+        QString truckBrand = config.value("brandId").toString();
 
         emit dataChanged(
-            speed,
+            speedInt,
             speedLimit,
+            cruiseControlSpeed,
             rpm,
             fuelPercentage,
             adbluePercentage,
@@ -147,9 +160,14 @@ void Tracker::processFrame(QByteArray frame) {
             parking,
             pressureWarning,
             valueToTime(gameTime),
-            valueToRemainingTime(deliveryTime / 60),
+            valueToRemainingTime(deliveryTime),
             valueToRemainingTime(restStop),
-            odometer
+            odometer,
+            deliveryDistance,
+            cargo,
+            cargoWeight,
+            oilTemperature,
+            truckBrand
         );
     }
 }

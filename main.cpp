@@ -25,8 +25,10 @@ int main(int argc, char *argv[])
 
     QSettings settings("config.ini", QSettings::IniFormat);
     settings.beginGroup("Config");
-    QString mode = settings.value("Mode", "release").toString();
-    QString ip   = settings.value("IP", "127.0.0.1").toString();
+    QString mode    = settings.value("Mode", "release").toString();
+    QString ip      = settings.value("IP", "127.0.0.1").toString();
+    QString truck   = settings.value("Truck", "generic").toString();
+    bool fullscreen = settings.value("Fullscreen", true).toBool();
     settings.endGroup();
 
     QQmlApplicationEngine engine;
@@ -42,14 +44,21 @@ int main(int argc, char *argv[])
 
     QObject *rootObject  = engine.rootObjects().first();
     QQuickWindow *window = qobject_cast<QQuickWindow*>(rootObject);
+    window->setProperty("truck", truck);
+    window->setProperty("mode", mode);
     window->setPosition(target->geometry().topLeft());
-    window->show();
 
     if (mode == "debug") {
-        rootObject->setProperty("connected", true);
-        rootObject->setProperty("displayIcons", true);
+        window->show();
+
+        animateNeedles(rootObject);
+        rootObject->setProperty("electricityOn", true);
+        rootObject->setProperty("cruiseControl", 50);
     } else {
-        window->showFullScreen();
+        window->show();
+        if (fullscreen) {
+            window->showFullScreen();
+        }
     }
 
     QObject::connect(tracker, &Tracker::communicationEstablished, [rootObject, tracker](bool result) {
@@ -78,9 +87,10 @@ int main(int argc, char *argv[])
         });
 
         QObject::connect(tracker, &Tracker::dataChanged, [rootObject]
-            (int speed, int speedLimit, int rpm, double fuelPercentage, double adbluePercentage, bool retarder, bool engineBrake, bool leftBlinker, bool rightBlinker, bool lowBeam, bool highBeam, bool parkingBrake, bool pressureWarning, QString time, QString deliveryTime, QString restTime, int odometer) {
+            (int speed, int speedLimit, int cruiseControl, int rpm, double fuelPercentage, double adbluePercentage, bool retarder, bool engineBrake, bool leftBlinker, bool rightBlinker, bool lowBeam, bool highBeam, bool parkingBrake, bool pressureWarning, QString time, QString deliveryTime, QString restTime, int odometer, int deliveryDistance, QString cargo, int cargoWeight, int oilTemperature, QString truckBrand) {
             rootObject->setProperty("speed", QVariant(speed));
             rootObject->setProperty("speedLimit", QVariant(speedLimit));
+            rootObject->setProperty("cruiseControl", QVariant(cruiseControl));
             rootObject->setProperty("rpm", QVariant(rpm));
             rootObject->setProperty("fuelPercentage", QVariant(fuelPercentage));
             rootObject->setProperty("adbluePercentage", QVariant(adbluePercentage));
@@ -95,6 +105,11 @@ int main(int argc, char *argv[])
             rootObject->setProperty("deliveryTime", deliveryTime);
             rootObject->setProperty("restTime", restTime);
             rootObject->setProperty("odometer", odometer);
+            rootObject->setProperty("deliveryDistance", deliveryDistance);
+            rootObject->setProperty("cargo", cargo);
+            rootObject->setProperty("cargoWeight", cargoWeight);
+            rootObject->setProperty("oilTemperature", oilTemperature);
+            rootObject->setProperty("truckBrand", truckBrand);
         });
     });
 
