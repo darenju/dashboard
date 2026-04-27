@@ -25,6 +25,7 @@ qt_add_qml_module(appDashboard
     QML_FILES trucks/DAFXF105.qml
     QML_FILES trucks/Generic.qml
     QML_FILES trucks/components/GenericGauge.qml
+    QML_FILES trucks/ScaniaStreamline.qml
 )
 # qt_add_resources(SOURCES qml.qrc)
 

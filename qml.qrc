@@ -41,5 +41,8 @@
         <file>images/brands/daf.png</file>
         <file>images/brands/man.png</file>
         <file>images/brands/volvo.png</file>
+        <file>images/scania.streamline/dashboard.png</file>
+        <file>images/scania.streamline/big-needle.png</file>
+        <file>images/generic/background-reversed-light.png</file>
     </qresource>
 </RCC>

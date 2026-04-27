@@ -14,6 +14,7 @@ Window {
 
     property string truck
     property string mode
+    property bool lightBack
     property bool connected: false
     property bool electricityOn: false
     property bool displayIcons: false
@@ -30,6 +31,7 @@ Window {
     property bool pressureWarning: false
     property bool gearbox: false
     property bool checkWarning: false
+    property bool parkingLight: false
     property bool rightBlinker: false
     property bool lowBeam: false
     property bool highBeam: false
@@ -52,6 +54,10 @@ Window {
 
     DAFXF105 {
         visible: truck == "DAF-XF105"
+    }
+
+    ScaniaStreamline {
+        visible: truck == "scania.streamline"
     }
 
     Generic {

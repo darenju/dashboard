@@ -29,6 +29,7 @@ int main(int argc, char *argv[])
     QString ip      = settings.value("IP", "127.0.0.1").toString();
     QString truck   = settings.value("Truck", "generic").toString();
     bool fullscreen = settings.value("Fullscreen", true).toBool();
+    bool lightBack  = settings.value("LightBackground", false).toBool();
     settings.endGroup();
 
     QQmlApplicationEngine engine;
@@ -46,6 +47,7 @@ int main(int argc, char *argv[])
     QQuickWindow *window = qobject_cast<QQuickWindow*>(rootObject);
     window->setProperty("truck", truck);
     window->setProperty("mode", mode);
+    window->setProperty("lightBack", QVariant(true));
     window->setPosition(target->geometry().topLeft());
 
     if (mode == "debug") {
@@ -54,6 +56,7 @@ int main(int argc, char *argv[])
         animateNeedles(rootObject);
         rootObject->setProperty("electricityOn", true);
         rootObject->setProperty("cruiseControl", 50);
+        rootObject->setProperty("parkingLight", true);
     } else {
         window->show();
         if (fullscreen) {
@@ -87,7 +90,7 @@ int main(int argc, char *argv[])
         });
 
         QObject::connect(tracker, &Tracker::dataChanged, [rootObject]
-            (int speed, int speedLimit, int cruiseControl, int rpm, double fuelPercentage, double adbluePercentage, bool retarder, bool engineBrake, bool leftBlinker, bool rightBlinker, bool lowBeam, bool highBeam, bool parkingBrake, bool pressureWarning, QString time, QString deliveryTime, QString restTime, int odometer, int deliveryDistance, QString cargo, int cargoWeight, int oilTemperature, QString truckBrand) {
+            (int speed, int speedLimit, int cruiseControl, int rpm, double fuelPercentage, double adbluePercentage, bool retarder, bool engineBrake, bool parkingLight, bool leftBlinker, bool rightBlinker, bool lowBeam, bool highBeam, bool parkingBrake, bool pressureWarning, QString time, QString deliveryTime, QString restTime, int odometer, int deliveryDistance, QString cargo, int cargoWeight, int oilTemperature, QString truckBrand) {
             rootObject->setProperty("speed", QVariant(speed));
             rootObject->setProperty("speedLimit", QVariant(speedLimit));
             rootObject->setProperty("cruiseControl", QVariant(cruiseControl));
@@ -96,6 +99,7 @@ int main(int argc, char *argv[])
             rootObject->setProperty("adbluePercentage", QVariant(adbluePercentage));
             rootObject->setProperty("retarder", QVariant(retarder));
             rootObject->setProperty("engineBrake", QVariant(engineBrake));
+            rootObject->setProperty("parkingLight", QVariant(parkingLight));
             rootObject->setProperty("leftBlinker", QVariant(leftBlinker));
             rootObject->setProperty("rightBlinker", QVariant(rightBlinker));
             rootObject->setProperty("lowBeam", QVariant(lowBeam));

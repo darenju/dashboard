@@ -30,7 +30,7 @@ Rectangle {
     }
 
     Image {
-        source: "qrc:/images/generic/background-reversed.png"
+        source: lightBack && parkingLight ? "qrc:/images/generic/background-reversed-light.png" : "qrc:/images/generic/background-reversed.png"
         width: parent.width
         anchors.bottom: parent.bottom
         fillMode: Image.PreserveAspectFit

@@ -121,6 +121,7 @@ void Tracker::processFrame(QByteArray frame) {
         double adbluePercentage = truck.value("adblue").toObject().value("amount").toDouble() / config.value("adblueCapacity").toDouble();
 
         QJsonObject light = truck.value("light").toObject();
+        bool parkingLight = light.value("parking").toBool();
         bool leftBlinker  = light.value("leftBlinker").toBool();
         bool rightBlinker = light.value("rightBlinker").toBool();
         bool lowBeam      = light.value("lowBeam").toBool();
@@ -153,6 +154,7 @@ void Tracker::processFrame(QByteArray frame) {
             adbluePercentage,
             retarder,
             engineBrake,
+            parkingLight,
             leftBlinker,
             rightBlinker,
             lowBeam,
